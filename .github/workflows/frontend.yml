@@ -1,0 +1,55 @@
+name: Frontend Build and Deploy
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+  pull_request:
+    branches:
+      - main  # Trigger on PR to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Setting up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use the LTS version or the version you're using
+
+      # Installing dependencies
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      # Running lint checks (optional, for code quality)
+      - name: Run linting
+        run: |
+          cd frontend
+          npm run lint
+
+      # Running tests (optional)
+      - name: Run tests
+        run: |
+          cd frontend
+          npm test -- --ci --coverage
+
+      # Building the React app
+      - name: Build React app
+        run: |
+          cd frontend
+          npm run build
+
+      # Uploading the build artifacts (optional)
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-build
+          path: frontend/dist 

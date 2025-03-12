@@ -1,0 +1,28 @@
+# Ignore build and dependencies
+target/
+build/
+*.jar
+*.war
+
+# Ignore IDE and editor files
+.idea/
+.vscode/
+*.iml
+
+# Ignore OS-specific and user-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore Git and version control files
+.git
+.gitignore
+
+# Ignore Docker-related files
+.dockerignore
+Dockerfile
+
+# Ignore logs and temp files
+logs/
+*.log
+tmp/
+*.swp

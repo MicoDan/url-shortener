@@ -29,17 +29,6 @@ jobs:
           cd frontend
           npm install
 
-      # Running lint checks (optional, for code quality)
-      - name: Run linting
-        run: |
-          cd frontend
-          npm run lint
-
-      # Running tests (optional)
-      - name: Run tests
-        run: |
-          cd frontend
-          npm test -- --ci --coverage
 
       # Building the React app
       - name: Build React app

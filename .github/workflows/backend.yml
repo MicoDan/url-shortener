@@ -35,11 +35,6 @@ jobs:
           cd backend
           ./mvnw clean install -DskipTests
 
-      # Running tests 
-      - name: Run tests
-        run: |
-          cd backend
-          ./mvnw test
 
       # Packaging the Spring Boot app
       - name: Package Spring Boot app

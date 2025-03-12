@@ -46,10 +46,3 @@ jobs:
         run: |
           cd frontend
           npm run build
-
-      # Uploading the build artifacts (optional)
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: frontend-build
-          path: frontend/dist 

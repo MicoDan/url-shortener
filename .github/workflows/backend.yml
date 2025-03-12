@@ -41,10 +41,3 @@ jobs:
         run: |
           cd backend
           ./mvnw clean package -DskipTests
-
-      # Uploading artifacts (optional)
-      - name: Upload backend artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: backend-artifact
-          path: backend/target/*.jar

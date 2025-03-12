@@ -10,6 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Implementation of Spring Security's UserDetails
+ * Provides core user information for authentication
+ */
 @Data
 @NoArgsConstructor
 public class UserDetailsImpl implements UserDetails {
@@ -18,12 +22,14 @@ public class UserDetailsImpl implements UserDetails {
     private Long id;
     private String username;
     private String email;
-
     private String password;
-
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    /**
+     * Constructor for creating user details instance
+     */
+    public UserDetailsImpl(Long id, String username, String email, String password, 
+                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -31,6 +37,9 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
+    /**
+     * Creates UserDetails instance from User entity
+     */
     public static UserDetailsImpl build(User user) {
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
         return new UserDetailsImpl(
@@ -56,4 +65,6 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return username;
     }
+
+    // Additional UserDetails methods are handled by Lombok @Data
 }

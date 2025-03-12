@@ -1,6 +1,12 @@
+/**
+ * PostCSS configuration
+ * Sets up CSS processing plugins
+ */
 export default {
     plugins: {
-        autoprefixer: {},
-        tailwindcss: {}
+        // Enable Tailwind CSS processing
+        tailwindcss: {},
+        // Add vendor prefixes automatically
+        autoprefixer: {}
     }
 };

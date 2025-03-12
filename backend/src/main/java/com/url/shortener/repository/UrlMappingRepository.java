@@ -8,8 +8,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for URL mapping operations
+ * Handles database interactions for shortened URLs
+ */
 @Repository
 public interface UrlMappingRepository extends JpaRepository<UrlMapping, Long> {
-   UrlMapping findByShortUrl(String shortUrl);
-   List<UrlMapping> findByUser(User user);
+    // Find URL mapping by short URL identifier
+    UrlMapping findByShortUrl(String shortUrl);
+    
+    // Find all URL mappings for a specific user
+    List<UrlMapping> findByUser(User user);
 }

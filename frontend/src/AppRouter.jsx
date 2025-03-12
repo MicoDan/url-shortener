@@ -11,41 +11,66 @@ import DashboardLayout from "./components/Dashboard/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import ErrorPage from "./components/ErrorPage";
 
-// <PrivateRoute publicPage={true}>
-//      <RegisterPage />
-// </PrivateRoute>
-
+/**
+ * Main router component handling application routing
+ * Defines routes and their corresponding components
+ */
 const AppRouter = () => {
-  const hideHeaderFooter = location.pathname.startsWith("/s");
+    // Check if current path should hide header/footer
+    const hideHeaderFooter = location.pathname.startsWith("/s");
 
     return (
         <>
-        {!hideHeaderFooter && <Navbar /> }
-        <Toaster position='bottom-center'/>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/s/:url" element={<ShortenUrlPage />} />
-
-          <Route path="/register" element={<PrivateRoute publicPage={true}><RegisterPage /></PrivateRoute>} />
-          <Route path="/login" element={<PrivateRoute publicPage={true}><LoginPage /></PrivateRoute>} />
-          
-          <Route path="/dashboard" element={ <PrivateRoute publicPage={false}><DashboardLayout /></PrivateRoute>} />
-          <Route path="/error" element={ <ErrorPage />} />
-          <Route path="*" element={ <ErrorPage message="We can't seem to find the page you're looking for"/>} />
-        </Routes>
-        {!hideHeaderFooter && <Footer />}
-      </>
+            {/* Conditionally render header based on route */}
+            {!hideHeaderFooter && <Navbar />}
+            <Toaster position='bottom-center'/>
+            
+            {/* Define application routes */}
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/s/:url" element={<ShortenUrlPage />} />
+                
+                {/* Protected routes with authentication */}
+                <Route path="/register" element={
+                    <PrivateRoute publicPage={true}>
+                        <RegisterPage />
+                    </PrivateRoute>
+                } />
+                <Route path="/login" element={
+                    <PrivateRoute publicPage={true}>
+                        <LoginPage />
+                    </PrivateRoute>
+                } />
+                <Route path="/dashboard" element={
+                    <PrivateRoute publicPage={false}>
+                        <DashboardLayout />
+                    </PrivateRoute>
+                } />
+                
+                {/* Error handling routes */}
+                <Route path="/error" element={<ErrorPage />} />
+                <Route path="*" element={
+                    <ErrorPage message="We can't seem to find the page you're looking for"/>
+                } />
+            </Routes>
+            
+            {/* Conditionally render footer based on route */}
+            {!hideHeaderFooter && <Footer />}
+        </>
     );
 }
 
-
-export default AppRouter;
-
+/**
+ * Router component for subdomain handling
+ * Manages URL redirects on custom subdomains
+ */
 export const SubDomainRouter = () => {
     return (
         <Routes>
-          <Route path="/:url" element={<ShortenUrlPage />} />
+            <Route path="/:url" element={<ShortenUrlPage />} />
         </Routes>
-    )
+    );
 }
+
+export default AppRouter;

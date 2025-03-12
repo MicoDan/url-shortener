@@ -1,6 +1,12 @@
-/** @type {import('tailwindcss').Config} */
+/**
+ * Tailwind CSS configuration
+ * Customizes the framework's styling options
+ */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       backgroundImage: {
@@ -11,15 +17,15 @@ export default {
       colors: {
         navbarColor: "#ffffff",
         btnColor: "#3364F7",
-        linkColor: "#2a5bd7",
+        customRed: "#FF0000",
+        linkColor: "#0000EE"
       },
       boxShadow: {
-        custom: "0 0 15px rgba(0, 0, 0, 0.3)",
-        right: "10px 0px 10px -5px rgba(0, 0, 0, 0.3)",
+        custom: "rgba(0, 0, 0, 0.24) 0px 3px 8px"
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
-        montserrat: ["Montserrat"],
+        montserrat: ["Montserrat", "sans-serif"],
       },
     },
   },

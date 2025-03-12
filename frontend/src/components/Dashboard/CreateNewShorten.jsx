@@ -53,7 +53,7 @@ const CreateNewShorten = ({ setOpen }) => {
             >
 
                 <h1 className="font-montserrat sm:mt-0 mt-3 text-center  font-bold sm:text-2xl text-[22px] text-slate-800 ">
-                    Create New Shorten Url
+                    Create New Short Url
                 </h1>
 
                 <hr className="mt-2 sm:mb-5 mb-3 text-slate-950" />

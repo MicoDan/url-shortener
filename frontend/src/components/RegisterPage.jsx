@@ -47,7 +47,7 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit(registerHandler)}
             className="sm:w-[450px] w-[360px]  shadow-custom py-8 sm:px-8 px-4 rounded-md">
             <h1 className="text-center font-serif text-[#242130] font-bold lg:text-3xl text-2xl">
-                Register Here
+                Register
             </h1>
 
             <hr className='mt-2 mb-5 text-black'/>

@@ -51,7 +51,7 @@ const LandingPage = () => {
               onClick={dashBoardNavigateHandler}
               className="bg-[#242130] w-40 text-white rounded-md py-2"
             >
-              Manage Your Links
+              Links Dashboard
             </motion.button>
             <motion.button
               initial={{ opacity: 0, y: 80 }}
@@ -93,7 +93,7 @@ const LandingPage = () => {
           transition={{ duration: 0.8 }}
           className="text-[#242130] font-roboto font-bold lg:w-[60%] md:w-[70%] sm:w-[80%] mx-auto text-3xl text-center"
         >
-          Trusted by innovators and teams at leading global companies.
+          Trusted by innovators and teams worldwide.
         </motion.p>
         <div className="pt-4 pb-7 grid lg:gap-7 gap-4 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mt-4">
           <Card

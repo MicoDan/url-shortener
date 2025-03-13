@@ -1,25 +1,23 @@
 # Build stage
 FROM node:18-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY package.json package-lock.json ./
-RUN npm install
+COPY package.json package-lock.json ./ 
+RUN npm ci
 
-# Build application
-COPY . .
+COPY . . 
 RUN npm run build
 
-# Runtime stage with Nginx
+# Runtime stage
 FROM nginx:stable-alpine
 
-# Copy built files to Nginx
-COPY --from=build /app/build /usr/share/nginx/html
+# Correct the stage name from 'dist' to 'build'
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose web server port
+# Copy the Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 
-# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]

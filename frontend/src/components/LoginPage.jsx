@@ -85,7 +85,7 @@ const LoginPage = () => {
             <button
                 disabled={loader}
                 type='submit'
-                className='bg-customRed font-semibold text-white  bg-[#242130] w-full py-2 hover:text-slate-400 transition-colors duration-100 rounded-sm my-3'>
+                className=' font-semibold text-white  bg-[#242130] w-full py-2 hover:text-slate-400 transition-colors duration-100 rounded-sm my-3'>
                 {loader ? "Loading..." : "Login"}
             </button>
 

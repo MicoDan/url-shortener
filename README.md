@@ -48,6 +48,64 @@ A comprehensive URL shortening service built with Spring Boot and React, featuri
 
 ## Detailed Setup Instructions
 
+## Database Setup
+
+### MySQL Setup
+
+1. **Install MySQL**
+   ```bash
+   # For Ubuntu/Debian
+   sudo apt install mysql-server
+   
+   # For Windows
+   # Download MySQL Installer from https://dev.mysql.com/downloads/installer/
+   ```
+
+2. **Start MySQL Service**
+   ```bash
+   # For Ubuntu/Debian
+   sudo systemctl start mysql
+   
+   # For Windows
+   # MySQL service starts automatically after installation
+   ```
+
+3. **Create Database and User**
+   ```sql
+   # Log into MySQL
+   mysql -u root -p
+   
+   # Create database
+   CREATE DATABASE your_database_name;
+   
+   # Create user and grant privileges
+   CREATE USER 'urluser'@'localhost' IDENTIFIED BY 'your_password';
+   GRANT ALL PRIVILEGES ON url_shortener.* TO 'urluser'@'localhost';
+   FLUSH PRIVILEGES;
+   ```
+
+
+### Common Issues
+
+1. **Connection Refused**
+   - Verify MySQL is running
+   - Check port availability (default 3306)
+   - Ensure firewall allows MySQL connections
+
+2. **Access Denied**
+   - Verify username and password
+   - Check user privileges
+   ```sql
+   SHOW GRANTS FOR 'urluser'@'localhost';
+   ```
+
+3. **Database Not Found**
+   - Verify database name
+   - Check if database exists
+   ```sql
+   SHOW DATABASES;
+   ```
+
 ### Backend Setup
 
 #### Prerequisites
@@ -55,13 +113,8 @@ A comprehensive URL shortening service built with Spring Boot and React, featuri
 - MySQL 8.0+
 - Maven 3.9+
 
-#### Database Configuration
-1. Create MySQL database:
-```sql
-CREATE DATABASE urlShortener;
-```
 
-2. Configure `application.properties` in `backend/src/main/resources/`:
+1. Configure `application.properties` in `backend/src/main/resources/`:
 ```properties
 # Database Configuration
 spring.datasource.url=${YOUR_DATABASE_URL}
@@ -71,7 +124,7 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=${YOUR_DATABASE_DIALECT}
 
-frontend.url=${FRONTEND_URL:http://localhost:5173}
+frontend.url=http://localhost:5173
 logging.level.org.springframework.security=DEBUG
 logging.level.org.url.shortener=DEBUG
 logging.level.org.springframework.web=DEBUG
@@ -244,62 +297,115 @@ Response: 200 OK
 - Protected routes requiring authentication
 - XSS protection headers
 
-## Docker Deployment
+### Rate Limiting
+- IP-based rate limiting
+- User-based rate limiting for authenticated endpoints
+- Configurable limits in application properties
+
+## Running the app through docker
 
 
-### Backend Deployment
-```bash
-cd backend
-docker build -t url-shortener-backend .
-docker run -p 8080:8080 url-shortener-backend
+
+### **Step 1: Start Docker**
+Ensure Docker Desktop is installed and running on your system.
+
+### **Step 2: Navigate to the Directory**
+Go to the directory containing your `docker-compose.yml` file:
+By default it's the root directory
+
+
+### **Step 3: Build and Start the Containers**
+Run the following command to start all services:
+```sh
+docker-compose up --build
 ```
+- For background mode, use:
+  ```sh
+  docker-compose up -d --build
+  ```
 
-### Frontend Deployment
-```bash
-cd frontend
-docker build -t url-shortener-frontend .
-docker run -p 80:80 url-shortener-frontend
+### **Step 4: Check Running Containers**
+Verify that all containers are running:
+```sh
+docker ps
 ```
+You should see three containers:
+- `frontend` (React application)
+- `backend` (Spring Boot application)
+- `db` (MySQL database)
 
-## Development Guidelines
+### **Step 5: Access the Applications**
+Once everything is running:
+- Frontend: **http://localhost:5173**
+- Backend API: **http://localhost:8080**
+- Swagger UI: **http://localhost:8080/swagger-ui/index.html**
+- MySQL Database: **localhost:3306**
 
-### Backend Development
-- Follow REST API best practices
-- Implement proper error handling
-- Use DTOs for data transfer
-- Write unit tests for services
-- Document API endpoints
+### **Step 6: Debugging (if not working)**
+If you encounter issues:
 
-### Frontend Development
-- Use functional components
-- Implement proper state management
-- Follow React best practices
-- Maintain responsive design
-- Handle API errors gracefully
+1. **Check Service Logs**
+   ```sh
+   # All services
+   docker-compose logs -f
 
-## Troubleshooting
+   # Specific service
+   docker-compose logs -f backend
+   docker-compose logs -f frontend
+   docker-compose logs -f db
+   ```
 
-### Common Backend Issues
-1. Database connection errors
-   - Verify MySQL is running
-   - Check connection credentials
-   - Ensure database exists
+2. **Restart Services**
+   ```sh
+   # Restart everything
+   docker-compose down
+   docker-compose up -d --build
 
-2. JWT token issues
-   - Verify secret key configuration
-   - Check token expiration
-   - Validate token format
+   # Restart specific service
+   docker-compose restart backend
+   ```
 
-### Common Frontend Issues
-1. API connection errors
-   - Verify backend is running
-   - Check CORS configuration
-   - Validate API endpoint URLs
+3. **Check Database Connection**
+   ```sh
+   # Connect to MySQL
+   docker exec -it url-shortener-db mysql -u root urlShortener
+   ```
 
-2. Authentication issues
-   - Clear localStorage
-   - Check token expiration
-   - Verify credentials
+4. **Clean Start**
+   ```sh
+   # Remove all containers and volumes
+   docker-compose down -v
+   # Rebuild and start
+   docker-compose up --build -d
+   ```
+
+### **Common Issues and Solutions**
+
+1. **Frontend Not Loading**
+   - Check if the container is running
+   - Verify port 5173 is not in use
+   - Check frontend logs for errors
+
+2. **Backend API Not Responding**
+   - Ensure port 8080 is free
+   - Check backend logs for startup errors
+   - Verify database connection
+
+3. **Database Connection Failed**
+   - Check if MySQL container is healthy
+   - Verify database credentials
+   - Ensure database is initialized properly
+
+4. **Port Conflicts**
+   If you have port conflicts, modify the ports in `docker-compose.yml`:
+   ```yaml
+   frontend:
+     ports:
+       - "3000:80"  # Change 5173 to 3000
+   backend:
+     ports:
+       - "8081:8080"  # Change 8080 to 8081
+   ```
 
 ## Testing
 
@@ -334,14 +440,6 @@ Tests components working together:
 ./mvnw verify
 ```
 
-### Test Configuration
-Create `application-test.properties`:
-```properties
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.datasource.username=sa
-spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=create-drop
-```
 
 ### Coverage Goals
 - Service Layer: 80%
@@ -349,11 +447,30 @@ spring.jpa.hibernate.ddl-auto=create-drop
 - Repository Layer: 60%
 - Overall: 75%
 
+## Troubleshooting whole application
+
+### Common Backend Issues
+1. Database connection errors
+   - Verify MySQL is running
+   - Check connection credentials
+   - Ensure database exists
+
+2. JWT token issues
+   - Verify secret key configuration
+   - Check token expiration
+   - Validate token format
+
+### Common Frontend Issues
+1. API connection errors
+   - Verify backend is running
+   - Check CORS configuration
+   - Validate API endpoint URLs
+
+2. Authentication issues
+   - Clear localStorage
+   - Check token expiration
+   - Verify credentials
+
 ### Access Swagger
 - http://localhost:8080/swagger-ui/index.html
 
-
-### Rate Limiting
-- IP-based rate limiting
-- User-based rate limiting for authenticated endpoints
-- Configurable limits in application properties

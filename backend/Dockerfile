@@ -1,37 +1,29 @@
-# Multi-stage build for Spring Boot application
-
 # Build stage
-FROM eclipse-temurin:23-jdk AS build
+FROM eclipse-temurin:17-jdk AS build
 
-# Set working directory for build
 WORKDIR /app
 
-# Copy Maven wrapper files
-COPY mvnw ./
+COPY mvnw pom.xml ./  
 COPY .mvn/ .mvn/
 
-# Make Maven wrapper executable
-RUN chmod +x mvnw
+RUN chmod +x mvnw && ./mvnw dependency:go-offline
 
-# Copy and download dependencies
-COPY pom.xml ./
-RUN ./mvnw dependency:go-offline
-
-# Build application
 COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM eclipse-temurin:23-jre
+FROM eclipse-temurin:17-jre
 
-# Set working directory for runtime
 WORKDIR /app
 
-# Copy built application from build stage
+# Copy the wait-for-it.sh script
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+# Copy the built JAR file
 COPY --from=build /app/target/*.jar app.jar
 
-# Expose application port
 EXPOSE 8080
 
-# Start the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Use wait-for-it.sh to wait for the database to be ready
+ENTRYPOINT ["/wait-for-it.sh", "db:3306", "--", "java", "-jar", "/app/app.jar"]

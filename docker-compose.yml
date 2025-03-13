@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: micodan369314/url-shortener-frontend:latest
     ports:
       - "5173:80"
     depends_on:
@@ -13,9 +11,7 @@ services:
       - app-network
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: micodan369314/url-shortener-backend:latest
     ports:
       - "8080:8080"
     environment:

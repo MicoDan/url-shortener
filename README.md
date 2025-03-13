@@ -197,7 +197,7 @@ Authorization: Bearer {jwt_token}
 1. Ensure Docker is installed and running.
 2. Navigate to the project directory:
 ```bash
-cd project_root_directory
+you are in the root directory by default if you clone this repository
 ```
 3. Build and start containers:
 ```bash

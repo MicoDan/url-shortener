@@ -195,13 +195,10 @@ Authorization: Bearer {jwt_token}
 ## Running the App through Docker
 
 1. Ensure Docker is installed and running.
-2. Navigate to the project directory:
+2. Navigate to the directory where you installed docker-compose.yml file
+3. start containers:
 ```bash
-you are in the root directory by default if you clone this repository
-```
-3. Build and start containers:
-```bash
-docker-compose up --build
+docker-compose up -d
 ```
 4. Check running containers:
 ```bash
@@ -224,6 +221,9 @@ docker ps
 - Check backend logs: `docker-compose logs -f backend`.
 - Verify database connection.
 
+### Cannot start service db: Ports are not available.
+- Ensure port 3306 is free on your computer in order to run the mysql service.
+
 ### Database Connection Failed
 - Ensure MySQL container is running: `docker ps`.
 - Check database credentials.
@@ -237,6 +237,9 @@ frontend:
 backend:
   ports:
     - "8081:8080"  # Change 8080 to 8081
+
+db:
+  ports: "3307:3306" # change 3306 to 3307
 ```
 
 ## Testing
